@@ -5,23 +5,32 @@ import Button from "../UI/Button";
 
 import classes from "./AddUser.module.css";
 
-export default function AddUser() {
-  const [username, setUsername] = useState("");
-  const [age, setAge] = useState("");
+export default function AddUser(props) {
+
+  const [enteredUsername, setEnteredUsername] = useState("");
+  const [enteredAge, setEnteredAge] = useState("");
 
   const changeInputHandler = (id, event) => {
     if (id === "username") {
-      setUsername(event.target.value);
+      setEnteredUsername(event.target.value);
     } else if (id === "age") {
-      setAge(event.target.value);
+      setEnteredAge(event.target.value);
     }
   };
 
+
+
   const addUserHandler = (event) => {
     event.preventDefault();
-    console.log(username);
-    console.log(age);
-    // console.log("test");
+    if (enteredUsername.trim().length === 0 || enteredAge.trim().length === 0) {
+      return
+    }
+    if (+enteredAge < 1) {
+      return
+    }
+    props.onAddUser(enteredUsername, enteredAge);
+    setEnteredAge('')
+    setEnteredUsername('')
   };
 
   return (
@@ -29,16 +38,18 @@ export default function AddUser() {
       <form onSubmit={addUserHandler}>
         <label htmlFor="username">Username</label>
         <input
-          minLength={3}
+          // minLength={1}
           type="text"
           id="username"
+          value={enteredUsername}
           onChange={(change) => changeInputHandler("username", change)}
         />
         <label htmlFor="age">Age (Years)</label>
         <input
-        min={1}
+        // min={1}
           type="number"
           id="age"
+          value={enteredAge}
           onChange={(change) => changeInputHandler("age", change)}
         />
         <Button />
